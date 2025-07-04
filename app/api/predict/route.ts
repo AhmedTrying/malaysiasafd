@@ -2,6 +2,11 @@ import { type NextRequest, NextResponse } from "next/server"
 import { spawn } from "child_process"
 import path from "path"
 
+// This route is deprecated. Prediction is now handled by a Python serverless function (predict.py) at the project root or /api directory for Vercel compatibility.
+// See Vercel docs: https://vercel.com/docs/functions/python
+
+export const dynamic = 'error'; // Disable this route
+
 export async function POST(request: NextRequest) {
   try {
     const { summary, amountLost, scamType, state } = await request.json()
