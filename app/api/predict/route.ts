@@ -5,18 +5,29 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log("Received body for prediction:", body);
 
-    const response = await fetch("https://1555b7a4-f100-4efe-922d-df7f850957d6-00-3a3tb3hld9pzw.sisko.replit.dev/", {
+    const response = await fetch("https://1555b7a4-f100-4efe-922d-df7f850957d6-00-3a3tb3hld9pzw.sisko.replit.dev/predict", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0"
+      },
       body: JSON.stringify(body),
     });
 
-    const data = await response.json();
-    console.log("Replit API response:", data);
+    const text = await response.text();
+    console.log("Replit API raw response:", text);
+    console.log("Replit API status:", response.status);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      return NextResponse.json({ error: "Replit API did not return JSON", raw: text, status: response.status }, { status: 500 });
+    }
 
     if (!response.ok) {
       console.error("Replit API error:", data);
-      return NextResponse.json({ error: data.error || "Prediction failed" }, { status: 500 });
+      return NextResponse.json({ error: data.error || "Prediction failed", raw: text, status: response.status }, { status: 500 });
     }
 
     return NextResponse.json(data);
