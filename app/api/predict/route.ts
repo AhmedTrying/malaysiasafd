@@ -1,42 +1,24 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { spawn } from "child_process"
-import path from "path"
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { summary, amountLost, scamType, state } = await request.json()
+    const body = await request.json();
 
-    // Create a Python script call to use the trained model
-    const pythonScript = path.join(process.cwd(), "python", "predict_scam.py")
+    // Call your Replit Python API
+    const response = await fetch("https://1555b7a4-f100-4efe-922d-df7850957d6-00-3a3tb3hld9pzw.sisko.replit.dev/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-    return new Promise((resolve) => {
-      const python = spawn("python", [pythonScript, summary, amountLost.toString(), scamType, state])
+    const data = await response.json();
 
-      let result = ""
-      let error = ""
+    if (!response.ok) {
+      return NextResponse.json({ error: data.error || "Prediction failed" }, { status: 500 });
+    }
 
-      python.stdout.on("data", (data) => {
-        result += data.toString()
-      })
-
-      python.stderr.on("data", (data) => {
-        error += data.toString()
-      })
-
-      python.on("close", (code) => {
-        if (code === 0) {
-          try {
-            const prediction = JSON.parse(result)
-            resolve(NextResponse.json(prediction))
-          } catch (e) {
-            resolve(NextResponse.json({ error: "Failed to parse prediction result" }, { status: 500 }))
-          }
-        } else {
-          resolve(NextResponse.json({ error: error || "Python script failed" }, { status: 500 }))
-        }
-      })
-    })
+    return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to process prediction request" }, { status: 500 })
+    return NextResponse.json({ error: "Failed to process prediction request" }, { status: 500 });
   }
 }
