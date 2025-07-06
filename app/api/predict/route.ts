@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log("Received body for prediction:", body);
 
-    const response = await fetch("https://1555b7a4-f100-4efe-922d-df7850957d6-00-3a3tb3hld9pzw.sisko.replit.dev/predict", {
+    const response = await fetch("https://1555b7a4-f100-4efe-922d-df7f850957d6-00-3a3tb3hld9pzw.sisko.replit.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
