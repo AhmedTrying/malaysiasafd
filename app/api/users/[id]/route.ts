@@ -1,10 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { supabaseAdmin } from "@/lib/supabase"
-import { useState, useEffect } from "react"
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-
-const supabase = createClientComponentClient()
 
 // Update user
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
@@ -88,26 +83,3 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     return NextResponse.json({ error: "Failed to delete user" }, { status: 500 })
   }
 }
-
-const [scamTypes, setScamTypes] = useState<string[]>([])
-const [loadingScamTypes, setLoadingScamTypes] = useState(true)
-
-useEffect(() => {
-  async function fetchScamTypes() {
-    setLoadingScamTypes(true)
-    try {
-      const res = await fetch("/api/scam-types")
-      const json = await res.json()
-      if (json.data) {
-        setScamTypes(json.data.map((item: any) => item.name))
-      }
-    } catch (e) {
-      // Optionally handle error
-    } finally {
-      setLoadingScamTypes(false)
-    }
-  }
-  fetchScamTypes()
-}, [])
-
-export default withMiddlewareAuth()
