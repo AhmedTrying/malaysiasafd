@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle, AlertTriangle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 interface PredictionResult {
   prediction: "Scam" | "Non-Scam"
@@ -158,16 +159,21 @@ export default function GenerateReport() {
     setLoading(true)
 
     try {
+      const supabase = createClientComponentClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log("Session:", session); // Debug: log the session
+      const accessToken = session?.access_token;
+
       const response = await fetch("/api/pending-reports", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(accessToken ? { "Authorization": `Bearer ${accessToken}` } : {}),
         },
         body: JSON.stringify({
           ...formData,
           prediction: prediction.prediction,
           confidence: prediction.confidence,
-          userId: "current-user-id", // Replace with actual user ID
         }),
       })
 

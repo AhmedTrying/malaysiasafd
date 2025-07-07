@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { UserRole, hasPermission } from "./roles"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 interface User {
   id: string
@@ -41,24 +42,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (username: string, password: string) => {
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || "Failed to sign in")
+      const supabase = createClientComponentClient();
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: `${username}@local.user`,
+        password,
+      });
+      if (error || !data.user) {
+        throw new Error(error?.message || "Failed to sign in");
       }
-
-      const userData = await response.json()
-      setUser(userData)
-      localStorage.setItem("user", JSON.stringify(userData))
+      // Store user info (id, username, role) in state and localStorage
+      const userData = {
+        id: data.user.id,
+        username: username,
+        role: data.user.user_metadata?.role || 'user',
+      };
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 

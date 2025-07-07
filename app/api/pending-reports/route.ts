@@ -1,7 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { supabaseAdmin } from "@/lib/supabase"
-import { cookies } from "next/headers"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 
 // Get pending reports
 export async function GET() {
@@ -55,10 +53,19 @@ export async function GET() {
 // Add new pending report
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies })
-    const { data: { user } } = await supabase.auth.getUser()
+    // Extract access token from Authorization header
+    const authHeader = request.headers.get('authorization');
+    const accessToken = authHeader?.startsWith('Bearer ')
+      ? authHeader.slice(7)
+      : undefined;
 
-    if (!user) {
+    if (!accessToken) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
+    }
+
+    // Get user from Supabase using the access token
+    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(accessToken);
+    if (!user || userError) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
