@@ -1,13 +1,15 @@
+# Development Malaysia Scam and Fraud Dashboard 
 
-# 🇲🇾 Malaysia Scam and Fraud Dashboard
+<img width="1919" height="943" alt="image" src="https://github.com/user-attachments/assets/9c1e08dc-49ef-4940-a21c-b8a73e387119" />
 
 An interactive web-based platform designed to **monitor, analyze, and predict scam activities in Malaysia**, integrating descriptive and predictive analytics to combat digital fraud effectively.
+<img width="746" height="380" alt="System Architecture  drawio" src="https://github.com/user-attachments/assets/c8f00aef-78f1-4888-b7db-d9697de56ade" />
 
-![Dashboard Overview](screenshots/dashboard-home.png)
 
 ---
 
 ## 📌 Overview
+<img width="1913" height="942" alt="image" src="https://github.com/user-attachments/assets/a0537ff1-7350-4821-94a4-379500aaa011" />
 
 The **Malaysia Scam and Fraud Dashboard** centralizes scam reports, social media mentions, and official data sources like **MyCERT reports**, enabling users, analysts, and organizations to:
 
@@ -58,23 +60,19 @@ The **Malaysia Scam and Fraud Dashboard** centralizes scam reports, social media
 
 ## 📸 Screenshots
 
-| Dashboard                               | Report Submission                                 | Scam Prediction                                  |
-| --------------------------------------- | ------------------------------------------------- | ------------------------------------------------ |
-| ![Dashboard](screenshots/dashboard.png) | ![Report Submission](screenshots/report-form.png) | ![Prediction](screenshots/prediction-output.png) |
+| Dashboard     
+<img width="1919" height="943" alt="image" src="https://github.com/user-attachments/assets/7b6bda50-5a17-4b9a-85f5-52b069cf12fb" />
 
----
+| Report Submission    
+<img width="1905" height="992" alt="image" src="https://github.com/user-attachments/assets/c6f4a164-6cfb-4ffc-a033-6649cb140c10" />
+
+| Scam Prediction        
+<img width="856" height="368" alt="image" src="https://github.com/user-attachments/assets/84f28659-3074-4bb4-b79f-edce78759b78" />
+
 
 ## 🔄 System Architecture
+<img width="1103" height="631" alt="Page navigation diagram drawio" src="https://github.com/user-attachments/assets/12319762-7d7e-49f7-8ca9-0286fc143c32" />
 
-```mermaid
-graph TD
-A[User Reports Scam] --> B[Next.js Backend]
-B --> C[Supabase Database]
-B --> D[Flask ML API - Logistic Regression]
-D --> E[Prediction Result]
-C --> F[Power BI Visualizations]
-F --> G[Dashboard Display]
-```
 
 ---
 
@@ -148,9 +146,4 @@ This project was developed as part of **UTM Final Year Project (PSM2)** under th
 
 Special thanks to **Magnifi Machines** for stakeholder collaboration in fraud analytics.
 
----
-
-## 📜 License
-
-MIT License © 2025
 
